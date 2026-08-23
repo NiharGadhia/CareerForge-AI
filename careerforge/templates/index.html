@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerForge AI | Career Intelligence Platform</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+
+            <a href="{% url 'home' %}" class="logo">
+                CareerForge<span> AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#about">About</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="{% url 'login' %}" class="login-btn">Login</a>
+                <a href="{% url 'register' %}" class="signup-btn">Get Started</a>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- Hero Section -->
+    <main>
+
+        <section class="hero">
+            <div class="container hero-container">
+
+                <div class="hero-content">
+
+                    <div class="eyebrow">
+                        AI-Powered Career Guidance
+                    </div>
+
+                    <h1>
+                        Build a career path
+                        <span>that fits you.</span>
+                    </h1>
+
+                    <p class="hero-text">
+                        CareerForge AI analyzes your profile and resume to
+                        identify skill gaps, recommend career paths and
+                        institutes, and create a personalized learning roadmap.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="{% url 'register' %}" class="primary-btn">
+                            Get Started
+                            <span>→</span>
+                        </a>
+
+                        <a href="#how-it-works" class="secondary-btn">
+                            Explore Platform
+                        </a>
+                    </div>
+
+                    <p class="hero-note">
+                        Designed for HSC, UG & PG students
+                    </p>
+
+                </div>
+
+
+                <!-- Hero Visual -->
+                <div class="hero-visual">
+
+                    <div class="dashboard-card">
+
+                        <div class="dashboard-top">
+                            <div>
+                                <p class="small-label">Career Profile</p>
+                                <h3>Personalized Insights</h3>
+                            </div>
+
+                            <div class="status-dot"></div>
+                        </div>
+
+                        <div class="profile-row">
+                            <div class="profile-icon">CF</div>
+
+                            <div>
+                                <strong>Career Readiness</strong>
+                                <p>Based on your profile</p>
+                            </div>
+
+                            <strong class="score">82%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-fill"></div>
+                        </div>
+
+                        <div class="insight-grid">
+
+                            <div class="insight">
+                                <span>Skills</span>
+                                <strong>12</strong>
+                            </div>
+
+                            <div class="insight">
+                                <span>Skill Gaps</span>
+                                <strong>4</strong>
+                            </div>
+
+                            <div class="insight">
+                                <span>Career Paths</span>
+                                <strong>3</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="roadmap">
+                            <div class="roadmap-header">
+                                <span>Learning Roadmap</span>
+                                <span>68%</span>
+                            </div>
+
+                            <div class="roadmap-line">
+                                <span class="active"></span>
+                                <span class="active"></span>
+                                <span class="active"></span>
+                                <span></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Features -->
+        <section class="features" id="features">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="section-label">WHAT YOU GET</p>
+
+                    <h2>
+                        Career guidance built around you.
+                    </h2>
+
+                    <p>
+                        From understanding your current skills to planning
+                        your next step, CareerForge AI keeps everything in one place.
+                    </p>
+                </div>
+
+
+                <div class="feature-grid">
+
+                    <div class="feature-card">
+                        <div class="feature-number">01</div>
+
+                        <h3>Resume Analysis</h3>
+
+                        <p>
+                            Analyze your resume with AI to understand your
+                            skills, education, projects and certifications.
+                        </p>
+                    </div>
+
+
+                    <div class="feature-card">
+                        <div class="feature-number">02</div>
+
+                        <h3>Skill Gap Analysis</h3>
+
+                        <p>
+                            Identify missing or weak skills and understand
+                            what you need to improve for your career goals.
+                        </p>
+                    </div>
+
+
+                    <div class="feature-card">
+                        <div class="feature-number">03</div>
+
+                        <h3>Career Roadmap</h3>
+
+                        <p>
+                            Get personalized career and institute recommendations
+                            along with a structured learning roadmap.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- How It Works -->
+        <section class="how-it-works" id="how-it-works">
+
+            <div class="container">
+
+                <div class="section-heading center">
+                    <p class="section-label">HOW IT WORKS</p>
+
+                    <h2>
+                        From profile to career direction.
+                    </h2>
+                </div>
+
+
+                <div class="steps">
+
+                    <div class="step">
+                        <span>01</span>
+                        <div>
+                            <h3>Create your profile</h3>
+                            <p>
+                                Select your education level, preferred institute
+                                and career interests.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span>02</span>
+                        <div>
+                            <h3>Upload your resume</h3>
+                            <p>
+                                Let CareerForge AI understand your current
+                                skills and experience.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span>03</span>
+                        <div>
+                            <h3>Get your roadmap</h3>
+                            <p>
+                                Receive personalized career guidance,
+                                recommendations and a learning roadmap.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CTA -->
+        <section class="cta" id="about">
+
+            <div class="container cta-container">
+
+                <div>
+                    <p class="section-label">START YOUR JOURNEY</p>
+
+                    <h2>
+                        Your next career move starts here.
+                    </h2>
+                </div>
+
+                <a href="{% url 'register' %}" class="primary-btn">
+                    Get Started
+                    <span>→</span>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+
+            <div class="logo">
+                CareerForge<span> AI</span>
+            </div>
+
+            <p>
+                AI-powered career intelligence for the next generation.
+            </p>
+
+            <p class="copyright">
+                © 2026 CareerForge AI
+            </p>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>

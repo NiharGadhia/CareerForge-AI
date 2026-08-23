@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Resume | CareerForge AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/upload-resume.css' %}">
+</head>
+
+<body>
+
+    <div class="upload-page">
+
+        <!-- Header -->
+        <header class="upload-header">
+
+            <a href="{% url 'home' %}" class="logo">
+                CareerForge<span> AI</span>
+            </a>
+
+            <div class="step-indicator">
+                <span class="active">02</span>
+                <span>Resume</span>
+            </div>
+
+        </header>
+
+        <!-- Main -->
+        <main class="upload-main">
+
+            <div class="upload-card">
+
+                <div class="upload-intro">
+
+                    <p class="eyebrow">RESUME ANALYSIS</p>
+
+                    <h1>
+                        Upload your
+                        <span>resume.</span>
+                    </h1>
+
+                    <p>
+                        Upload your latest resume and let CareerForge AI
+                        analyze your skills, education, projects, and certifications.
+                    </p>
+
+                </div>
+
+
+                <!-- Upload Area -->
+                <div class="drop-zone" id="dropZone">
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>Drop your resume here</h3>
+
+                    <p>
+                        or
+                    </p>
+
+                    <label for="resumeInput" class="browse-btn">
+                        Browse File
+                    </label>
+
+                    <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" hidden>
+
+                    <span class="file-support">
+                        PDF, DOC or DOCX · Max 5 MB
+                    </span>
+
+                </div>
+
+
+                <!-- Selected File -->
+                <div class="selected-file" id="selectedFile">
+
+                    <div class="file-info">
+
+                        <div class="file-icon">
+                            PDF
+                        </div>
+
+                        <div>
+                            <strong id="fileName">
+                                resume.pdf
+                            </strong>
+
+                            <span id="fileSize">
+                                0 KB
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="remove-btn" id="removeFile">
+                        Remove
+                    </button>
+
+                </div>
+
+
+                <!-- Analyze Button -->
+                <button type="button" class="analyze-btn" id="analyzeBtn" disabled>
+                    Analyze Resume
+                    <span>→</span>
+                </button>
+
+
+                <p class="privacy-note">
+                    Your resume is used only to generate personalized career insights.
+                </p>
+
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="copyright">
+            © 2026 CareerForge AI
+        </footer>
+
+    </div>
+
+    <script>
+
+        const dropZone = document.getElementById("dropZone");
+        const resumeInput = document.getElementById("resumeInput");
+
+        const selectedFile = document.getElementById("selectedFile");
+        const fileName = document.getElementById("fileName");
+        const fileSize = document.getElementById("fileSize");
+
+        const removeFile = document.getElementById("removeFile");
+        const analyzeBtn = document.getElementById("analyzeBtn");
+
+
+        /* Open file browser */
+
+        dropZone.addEventListener("click", (event) => {
+
+            if (!event.target.closest(".browse-btn")) {
+                resumeInput.click();
+            }
+
+        });
+
+
+        /* File selected */
+
+        resumeInput.addEventListener("change", () => {
+
+            if (resumeInput.files.length > 0) {
+
+                handleFile(resumeInput.files[0]);
+
+            }
+
+        });
+
+
+        /* Drag over */
+
+        dropZone.addEventListener("dragover", (event) => {
+
+            event.preventDefault();
+
+            dropZone.classList.add("dragging");
+
+        });
+
+
+        /* Drag leave */
+
+        dropZone.addEventListener("dragleave", () => {
+
+            dropZone.classList.remove("dragging");
+
+        });
+
+
+        /* Drop */
+
+        dropZone.addEventListener("drop", (event) => {
+
+            event.preventDefault();
+
+            dropZone.classList.remove("dragging");
+
+            const file = event.dataTransfer.files[0];
+
+            if (file) {
+
+                handleFile(file);
+
+            }
+
+        });
+
+
+        /* Handle file */
+
+        function handleFile(file) {
+
+            const allowedTypes = [
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert("Please upload a PDF, DOC or DOCX file.");
+
+                return;
+
+            }
+
+
+            if (file.size > 5 * 1024 * 1024) {
+
+                alert("File size must be less than 5 MB.");
+
+                return;
+
+            }
+
+
+            fileName.textContent = file.name;
+
+            fileSize.textContent = formatFileSize(file.size);
+
+
+            selectedFile.classList.add("show");
+
+            analyzeBtn.disabled = false;
+
+        }
+
+
+        /* Format file size */
+
+        function formatFileSize(bytes) {
+
+            if (bytes < 1024) {
+
+                return bytes + " B";
+
+            }
+
+            if (bytes < 1024 * 1024) {
+
+                return (bytes / 1024).toFixed(1) + " KB";
+
+            }
+
+            return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+
+        }
+
+
+        /* Remove file */
+
+        removeFile.addEventListener("click", () => {
+
+            resumeInput.value = "";
+
+            selectedFile.classList.remove("show");
+
+            analyzeBtn.disabled = true;
+
+        });
+
+
+        /* Analyze button */
+
+        analyzeBtn.addEventListener("click", () => {
+
+            if (!resumeInput.files.length) {
+
+                return;
+
+            }
+
+            /*
+                Backend integration will be added later.
+                For now, this button is UI-only.
+            */
+
+            alert("Resume analysis will be connected with Django later.");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

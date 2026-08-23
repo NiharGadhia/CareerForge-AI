@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Career Profile | CareerForge AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+
+<body>
+
+    <div class="profile-page">
+
+        <!-- Header -->
+        <header class="profile-header">
+
+            <a href="{% url 'home' %}" class="logo">
+                CareerForge<span> AI</span>
+            </a>
+
+            <div class="step-indicator">
+                <span class="active">01</span>
+                <span>Profile</span>
+            </div>
+
+        </header>
+
+
+        <!-- Main Content -->
+        <main class="profile-main">
+
+            <div class="profile-card">
+
+                <div class="profile-intro">
+
+                    <p class="eyebrow">CAREER PROFILE</p>
+
+                    <h1>
+                        Tell us about your
+                        <span>career goals.</span>
+                    </h1>
+
+                    <p>
+                        Help CareerForge AI understand your background and
+                        preferences so we can provide more relevant career guidance.
+                    </p>
+
+                </div>
+
+
+                <form>
+
+                    <!-- Education Level -->
+                    <div class="form-group">
+
+                        <label for="education">
+                            Education Level
+                        </label>
+
+                        <select id="education" name="education" required>
+
+                            <option value="" selected disabled>
+                                Select your education level
+                            </option>
+
+                            <option value="hsc">HSC</option>
+                            <option value="ug">Undergraduate (UG)</option>
+                            <option value="pg">Postgraduate (PG)</option>
+
+                        </select>
+
+                        <p class="helper-text">
+                            Select your current or completed education level.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Preferred Institute -->
+                    <div class="form-group">
+
+                        <label for="institute">
+                            Preferred Institute
+                        </label>
+
+                        <select id="institute" name="institute" required>
+
+                            <option value="" selected disabled>
+                                Select your preferred institute
+                            </option>
+
+                            <option value="mit-wpu">
+                                MIT World Peace University
+                            </option>
+
+                            <option value="dypatil">
+                                Dr. D. Y. Patil Institute
+                            </option>
+
+                            <option value="symbiosis">
+                                Symbiosis International University
+                            </option>
+
+                            <option value="pune-university">
+                                Savitribai Phule Pune University
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                        <p class="helper-text">
+                            Choose an institute you are interested in.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Career Interest -->
+                    <div class="form-group">
+
+                        <label for="career">
+                            Career Interest
+                        </label>
+
+                        <select id="career" name="career" required>
+
+                            <option value="" selected disabled>
+                                Select your career interest
+                            </option>
+
+                            <option value="software-development">
+                                Software Development
+                            </option>
+
+                            <option value="data-science">
+                                Data Science & Analytics
+                            </option>
+
+                            <option value="ai-ml">
+                                Artificial Intelligence & Machine Learning
+                            </option>
+
+                            <option value="cybersecurity">
+                                Cybersecurity
+                            </option>
+
+                            <option value="cloud">
+                                Cloud Computing
+                            </option>
+
+                            <option value="web-development">
+                                Web Development
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                        <p class="helper-text">
+                            Select the field you want to build your career in.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Continue -->
+                    <button type="submit" class="continue-btn">
+
+                        Save & Continue
+
+                        <span>→</span>
+
+                    </button>
+
+                </form>
+
+
+                <p class="privacy-note">
+                    Your information is used only to personalize your career recommendations.
+                </p>
+
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="copyright">
+            © 2026 CareerForge AI
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
