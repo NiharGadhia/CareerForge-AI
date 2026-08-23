@@ -40,9 +40,3 @@ def login(request):
         })
 
     return render(request, 'login.html')
-
-def profile(request):
-    return render(request, 'profile.html')
-
-def upload_resume(request):
-    return render(request, 'upload-resume.html')
