@@ -58,32 +58,32 @@
 
                     {% if profile_completed %}
 
-                        <p class="status completed">
-                            ✓ Profile Completed
-                        </p>
+                    <p class="status completed">
+                        ✓ Profile Completed
+                    </p>
 
-                        <p class="card-description">
-                            Your career preferences are saved.
-                        </p>
+                    <p class="card-description">
+                        Your career preferences are saved.
+                    </p>
 
-                        <a href="{% url 'profile' %}" class="card-button">
-                            Edit Profile
-                        </a>
+                    <a href="{% url 'profile' %}" class="card-button">
+                        Edit Profile
+                    </a>
 
                     {% else %}
 
-                        <p class="status incomplete">
-                            Profile Not Completed
-                        </p>
+                    <p class="status incomplete">
+                        Profile Not Completed
+                    </p>
 
-                        <p class="card-description">
-                            Complete your profile to get personalized
-                            career recommendations.
-                        </p>
+                    <p class="card-description">
+                        Complete your profile to get personalized
+                        career recommendations.
+                    </p>
 
-                        <a href="{% url 'profile' %}" class="card-button">
-                            Complete Profile
-                        </a>
+                    <a href="{% url 'profile' %}" class="card-button">
+                        Complete Profile
+                    </a>
 
                     {% endif %}
 
@@ -94,28 +94,30 @@
 
             <!-- Resume Card -->
             <div class="status-card">
-
                 <div class="card-content">
-
                     <h3>Resume</h3>
 
-                    <p class="status incomplete">
-                        Not Uploaded
+                    {% if resume_uploaded %}
+                    <p class="status completed">✓ Resume Uploaded</p>
+                    <p class="card-description">
+                        Your resume is ready for AI-powered analysis.
                     </p>
-
+                    <a href="{% url 'upload_resume' %}" class="card-button">
+                        Analyze Resume
+                    </a>
+                    {% else %}
+                    <p class="status incomplete">Not Uploaded</p>
                     <p class="card-description">
                         Upload your resume to unlock AI-powered
                         resume analysis.
                     </p>
-
                     <a href="{% url 'upload_resume' %}" class="card-button">
                         Upload Resume
                     </a>
+                    {% endif %}
 
                 </div>
-
             </div>
-
         </section>
 
         <!-- AI TOOLS -->
