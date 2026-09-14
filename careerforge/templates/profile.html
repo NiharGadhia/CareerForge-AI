@@ -1,167 +1,128 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Career Profile | CareerForge AI</title>
-
+    <title>Profile | CareerForge AI</title>
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
 
 <body>
-
-    <div class="profile-page">
-
-        <!-- Header -->
-        <header class="profile-header">
-
-            <a href="{% url 'home' %}" class="logo">
-                CareerForge<span> AI</span>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="logo">
+                CareerForge <span>AI</span>
             </a>
+            <span class="page-label">Profile</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                Dashboard
+            </a>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+        </div>
+    </nav>
 
-            <div class="step-indicator">
-                <span class="active">01</span>
-                <span>Profile</span>
+    <!-- MAIN -->
+    <main class="profile-container">
+        <section class="profile-card">
+            <div class="profile-intro">
+                <div class="intro-top">
+                    <p class="eyebrow">CAREER PROFILE</p>
+                    <a href="{% url 'profile' %}?skip=1" class="skip-link">
+                        Skip for now →
+                    </a>
+                </div>
+                <h1>Tell us about your <span>career goals.</span></h1>
+                <p class="intro-text">
+                    Help CareerForge AI understand your background and preferences
+                    so we can provide more relevant career guidance.
+                </p>
             </div>
 
-        </header>
+            <form method="POST">
+                {% csrf_token %}
 
-        <!-- Main Content -->
-        <main class="profile-main">
-            <div class="profile-card">
-                <div class="profile-intro">
-                    <p class="eyebrow">CAREER PROFILE</p>
-                    <h1>
-                        Tell us about your
-                        <span>career goals.</span>
-                    </h1>
-                    <p>
-                        Help CareerForge AI understand your background and
-                        preferences so we can provide more relevant career guidance.
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ form.full_name.value|default:'' }}"
+                        placeholder="Enter your full name" required>
+                    <p class="helper-text">
+                        Enter your full name as you want it to appear on your career profile.
                     </p>
                 </div>
 
-                <form method="POST">
-                    {% csrf_token %}
+                <div class="form-group">
+                    <label for="education">Education Level</label>
+                    <select id="education" name="education_level" required>
+                        <option value="" disabled {% if not form.education_level.value %}selected{% endif %}>
+                            Select your education level</option>
+                        <option value="HSC" {% if form.education_level.value == "HSC" %}selected{% endif %}>
+                            HSC</option>
+                        <option value="UG" {% if form.education_level.value == "UG" %}selected{% endif %}>
+                            Undergraduate (UG)</option>
+                        <option value="PG" {% if form.education_level.value == "PG" %}selected{% endif %}>
+                            Postgraduate (PG)</option>
+                    </select>
+                    <p class="helper-text">
+                        Select your current or completed education level.
+                    </p>
+                </div>
 
-                    <!-- Full Name -->
-                    <div class="form-group">
-                        <label for="full_name">
-                            Full Name
-                        </label>
-                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
-                        <p class="helper-text">
-                            Enter your full name as you want it to appear on your career profile.
-                        </p>
-                    </div>
+                <div class="form-group">
+                    <label for="institute">Preferred Institute</label>
+                    <select id="institute" name="preferred_institute" required>
+                        <option value="" disabled {% if not form.preferred_institute.value %}selected{% endif %}>Select your preferred institute</option>
+                        <option value="MIT World Peace University" {% if form.preferred_institute.value == "MIT World Peace University" %}selected{% endif %}>MIT World Peace University</option>
+                        <option value="Dr. D. Y. Patil Institute" {% if form.preferred_institute.value == "Dr. D. Y. Patil Institute" %}selected{% endif %}>Dr. D. Y. Patil Institute</option>
+                        <option value="Symbiosis International University" {% if form.preferred_institute.value == "Symbiosis International University" %}selected{% endif %}>Symbiosis International University</option>
+                        <option value="Savitribai Phule Pune University" {% if form.preferred_institute.value == "Savitribai Phule Pune University" %}selected{% endif %}>Savitribai Phule Pune University</option>
+                        <option value="Other" {% if form.preferred_institute.value == "Other" %}selected{% endif %}>Other</option>
+                    </select>
+                    <p class="helper-text">
+                        Choose an institute you are interested in.
+                    </p>
+                </div>
 
-                    <!-- Education Level -->
-                    <div class="form-group">
-                        <label for="education">
-                            Education Level
-                        </label>
-                        <select id="education" name="education_level" required>
-                            <option value="" selected disabled>
-                                Select your education level
-                            </option>
-                            <option value="HSC">HSC</option>
-                            <option value="UG">Undergraduate (UG)</option>
-                            <option value="PG">Postgraduate (PG)</option>
-                        </select>
-                        <p class="helper-text">
-                            Select your current or completed education level.
-                        </p>
-                    </div>
+                <div class="form-group">
+                    <label for="career">Career Interest</label>
+                    <select id="career" name="career_interest" required>
+                        <option value="" disabled {% if not form.career_interest.value %}selected{% endif %}>Select your career interest</option>
+                        <option value="Software Development" {% if form.career_interest.value == "Software Development" %}selected{% endif %}>Software Development</option>
+                        <option value="Data Science & Analytics" {% if form.career_interest.value == "Data Science & Analytics" %}selected{% endif %}>Data Science & Analytics</option>
+                        <option value="Artificial Intelligence & Machine Learning" {% if form.career_interest.value == "Artificial Intelligence & Machine Learning" %}selected{% endif %}>Artificial Intelligence & Machine Learning</option>
+                        <option value="Cybersecurity" {% if form.career_interest.value == "Cybersecurity" %}selected{% endif %}>Cybersecurity</option>
+                        <option value="Cloud Computing" {% if form.career_interest.value == "Cloud Computing" %}selected{% endif %}>Cloud Computing</option>
+                        <option value="Web Development" {% if form.career_interest.value == "Web Development" %}selected{% endif %}>Web Development</option>
+                        <option value="Other" {% if form.career_interest.value == "Other" %}selected{% endif %}>Other</option>
+                    </select>
+                    <p class="helper-text">
+                        Select the field you want to build your career in.
+                    </p>
+                </div>
 
-                    <!-- Preferred Institute -->
-                    <div class="form-group">
-                        <label for="institute">
-                            Preferred Institute
-                        </label>
-                        <select id="institute" name="preferred_institute" required>
-                            <option value="" selected disabled>
-                                Select your preferred institute
-                            </option>
-                            <option value="mit-wpu">
-                                MIT World Peace University
-                            </option>
-                            <option value="dypatil">
-                                Dr. D. Y. Patil Institute
-                            </option>
-                            <option value="symbiosis">
-                                Symbiosis International University
-                            </option>
-                            <option value="pune-university">
-                                Savitribai Phule Pune University
-                            </option>
-                            <option value="other">
-                                Other
-                            </option>
-                        </select>
-
-                        <p class="helper-text">
-                            Choose an institute you are interested in.
-                        </p>
-                    </div>
-
-                    <!-- Career Interest -->
-                    <div class="form-group">
-                        <label for="career">
-                            Career Interest
-                        </label>
-                        <select id="career" name="career_interest" required>
-                            <option value="" selected disabled>
-                                Select your career interest
-                            </option>
-                            <option value="software-development">
-                                Software Development
-                            </option>
-                            <option value="data-science">
-                                Data Science & Analytics
-                            </option>
-                            <option value="ai-ml">
-                                Artificial Intelligence & Machine Learning
-                            </option>
-                            <option value="cybersecurity">
-                                Cybersecurity
-                            </option>
-                            <option value="cloud">
-                                Cloud Computing
-                            </option>
-                            <option value="web-development">
-                                Web Development
-                            </option>
-                            <option value="other">
-                                Other
-                            </option>
-                        </select>
-
-                        <p class="helper-text">
-                            Select the field you want to build your career in.
-                        </p>
-                    </div>
-
-                    <!-- Continue -->
-                    <button type="submit" class="continue-btn">
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">
                         Save & Continue
                         <span>→</span>
                     </button>
-                </form>
+                </div>
+            </form>
 
-                <p class="privacy-note">
-                    Your information is used only to personalize your career recommendations.
-                </p>
-            </div>
-        </main>
+            <p class="privacy-note">
+                Your information is used only to personalize your career recommendations.
+            </p>
+        </section>
+    </main>
 
-        <!-- Footer -->
-        <footer class="copyright">
-            © 2026 CareerForge AI
-        </footer>
-    </div>
+    <footer class="copyright">
+        © 2026 CareerForge AI
+    </footer>
 </body>
 
 </html>

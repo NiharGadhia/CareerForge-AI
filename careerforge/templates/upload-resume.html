@@ -17,16 +17,16 @@
 
         <!-- Header -->
         <header class="upload-header">
-
-            <a href="{% url 'home' %}" class="logo">
-                CareerForge<span> AI</span>
-            </a>
-
-            <div class="step-indicator">
-                <span class="active">02</span>
-                <span>Resume</span>
+            <div class="nav-left">
+                <a href="{% url 'dashboard' %}" class="logo">
+                    CareerForge <span>AI</span>
+                </a>
+                <span class="page-label">Resume</span>
             </div>
-
+            <div class="nav-right">
+                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            </div>
         </header>
 
         <!-- Main -->

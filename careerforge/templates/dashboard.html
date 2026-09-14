@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CareerForge AI</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="logo">
+                CareerForge <span>AI</span>
+            </a>
+            <span class="page-label">Dashboard</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+
+            <div>
+                <p class="welcome-label">YOUR CAREER DASHBOARD</p>
+
+                <h1>
+                    Welcome back,
+                    <span>{{ user.username }}</span>
+                </h1>
+
+                <p class="welcome-text">
+                    Build your career with personalized AI-powered insights
+                    and recommendations.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Profile & Resume Status -->
+        <section class="status-grid">
+
+            <!-- Profile Card -->
+            <div class="status-card">
+
+                <div class="card-content">
+
+                    <h3>Career Profile</h3>
+
+                    {% if profile_completed %}
+
+                        <p class="status completed">
+                            ✓ Profile Completed
+                        </p>
+
+                        <p class="card-description">
+                            Your career preferences are saved.
+                        </p>
+
+                        <a href="{% url 'profile' %}" class="card-button">
+                            Edit Profile
+                        </a>
+
+                    {% else %}
+
+                        <p class="status incomplete">
+                            Profile Not Completed
+                        </p>
+
+                        <p class="card-description">
+                            Complete your profile to get personalized
+                            career recommendations.
+                        </p>
+
+                        <a href="{% url 'profile' %}" class="card-button">
+                            Complete Profile
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Resume Card -->
+            <div class="status-card">
+
+                <div class="card-content">
+
+                    <h3>Resume</h3>
+
+                    <p class="status incomplete">
+                        Not Uploaded
+                    </p>
+
+                    <p class="card-description">
+                        Upload your resume to unlock AI-powered
+                        resume analysis.
+                    </p>
+
+                    <a href="{% url 'upload_resume' %}" class="card-button">
+                        Upload Resume
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- AI TOOLS -->
+        <section class="tools-section">
+            <div class="section-heading">
+                <div>
+                    <p class="card-label">AI CAREER TOOLS</p>
+                    <h2>Career Intelligence</h2>
+                </div>
+                <p>Personalized insights based on your profile and resume.</p>
+            </div>
+
+            <div class="tool-list">
+
+                <div class="tool-row">
+                    <div class="tool-number">01</div>
+                    <div class="tool-content">
+                        <h3>Skill Gap Analysis</h3>
+                        <p>
+                            Discover the skills you already have and identify
+                            what you need to learn for your target career.
+                        </p>
+                    </div>
+                    <span class="coming-soon">Coming Soon</span>
+                    <span class="tool-arrow">→</span>
+                </div>
+
+                <div class="tool-row">
+                    <div class="tool-number">02</div>
+                    <div class="tool-content">
+                        <h3>Career Recommendations</h3>
+                        <p>
+                            Get AI-powered career paths based on your education,
+                            interests and skill profile.
+                        </p>
+                    </div>
+                    <span class="coming-soon">Coming Soon</span>
+                    <span class="tool-arrow">→</span>
+                </div>
+
+                <div class="tool-row">
+                    <div class="tool-number">03</div>
+                    <div class="tool-content">
+                        <h3>Institute Recommendations</h3>
+                        <p>
+                            Explore institutes that align with your preferred
+                            career and educational goals.
+                        </p>
+                    </div>
+                    <span class="coming-soon">Coming Soon</span>
+                    <span class="tool-arrow">→</span>
+                </div>
+
+                <div class="tool-row">
+                    <div class="tool-number">04</div>
+                    <div class="tool-content">
+                        <h3>Learning Roadmap</h3>
+                        <p>
+                            Follow a structured learning path to build the skills
+                            required for your chosen career.
+                        </p>
+                    </div>
+                    <span class="coming-soon">Coming Soon</span>
+                    <span class="tool-arrow">→</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- JOURNEY -->
+        <section class="journey-section">
+            <div class="section-heading">
+                <div>
+                    <p class="card-label">YOUR PROGRESS</p>
+                    <h2>Career Journey</h2>
+                </div>
+            </div>
+
+            <div class="journey">
+
+                <div class="journey-item active">
+                    <div class="journey-dot">01</div>
+                    <h3>Build Profile</h3>
+                    <p>Education & interests</p>
+                </div>
+
+                <div class="journey-connector"></div>
+
+                <div class="journey-item">
+                    <div class="journey-dot">02</div>
+                    <h3>Analyze Resume</h3>
+                    <p>Skills & experience</p>
+                </div>
+
+                <div class="journey-connector"></div>
+
+                <div class="journey-item">
+                    <div class="journey-dot">03</div>
+                    <h3>Career Insights</h3>
+                    <p>AI recommendations</p>
+                </div>
+
+                <div class="journey-connector"></div>
+
+                <div class="journey-item">
+                    <div class="journey-dot">04</div>
+                    <h3>Learning Roadmap</h3>
+                    <p>Build your future</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

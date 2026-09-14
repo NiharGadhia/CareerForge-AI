@@ -9,25 +9,46 @@ from .models import UserProfile
 @login_required
 def profile(request):
 
-    user_profile, created = UserProfile.objects.get_or_create(
-        user=request.user
-    )
+    # Skip profile setup
+    if request.method == 'GET' and request.GET.get('skip') == '1':
+        return redirect('dashboard')
 
     if request.method == 'POST':
-        form = UserProfileForm(
-            request.POST,
-            instance=user_profile
-        )
+
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            form = UserProfileForm(
+                request.POST,
+                instance=user_profile
+            )
+
+        except UserProfile.DoesNotExist:
+
+            form = UserProfileForm(request.POST)
 
         if form.is_valid():
+
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
 
-            return redirect('upload_resume')
+            return redirect('dashboard')
 
     else:
-        form = UserProfileForm(instance=user_profile)
+
+        try:
+            user_profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+            form = UserProfileForm(
+                instance=user_profile
+            )
+
+        except UserProfile.DoesNotExist:
+
+            form = UserProfileForm()
 
     return render(request, 'profile.html', {
         'form': form
