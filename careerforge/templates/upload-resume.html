@@ -53,6 +53,10 @@
                 <form method="POST" enctype="multipart/form-data" id="resumeForm">
                     {% csrf_token %}
 
+                    {% if error %}
+                    <p class="error-message">{{ error }}</p>
+                    {% endif %}
+
                     <!-- Upload Area -->
                     <div class="drop-zone" id="dropZone">
                         <div class="upload-icon">
@@ -67,10 +71,10 @@
                             Browse File
                         </label>
 
-                        <input type="file" id="resumeInput" name="resume_file" accept=".pdf,.doc,.docx" hidden>
+                        <input type="file" id="resumeInput" name="resume_file" accept=".pdf" hidden>
 
                         <span class="file-support">
-                            PDF, DOC or DOCX · Max 5 MB
+                            PDF only · Max 5 MB
                         </span>
                     </div>
 
@@ -202,13 +206,11 @@
 
             const allowedTypes = [
                 "application/pdf",
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             ];
 
             if (!allowedTypes.includes(file.type)) {
 
-                alert("Please upload a PDF, DOC or DOCX file.");
+                alert("Please upload a PDF file.");
 
                 return;
 
