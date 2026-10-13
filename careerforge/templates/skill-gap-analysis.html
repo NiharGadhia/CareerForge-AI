@@ -1,0 +1,656 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Gap Analysis | CareerForge AI</title>
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --surface: #111720;
+            --surface-light: #161d27;
+            --text: #f5f7fa;
+            --text-secondary: #a5afbd;
+            --text-muted: #6f7a89;
+            --border: #252d38;
+            --primary: #5b8cff;
+            --primary-hover: #7aa2ff;
+            --primary-soft: rgba(91, 140, 255, 0.12);
+            --success: #34d399;
+            --warning: #f5b942;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 75% 0%,
+                    rgba(91, 140, 255, 0.08),
+                    transparent 30%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            background: rgba(11, 15, 20, 0.84);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left {
+            gap: 28px;
+        }
+
+        .logo {
+            color: var(--text);
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .page-label {
+            color: var(--text-muted);
+            font-size: 14px;
+            padding-left: 28px;
+            border-left: 1px solid var(--border);
+        }
+
+        .nav-right {
+            gap: 22px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .logout-btn {
+            color: var(--text);
+            font-size: 14px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-hover);
+        }
+
+        /* MAIN CONTAINER */
+
+        .analysis-container {
+            width: min(1120px, 88%);
+            margin: 0 auto;
+            padding: 52px 0 80px;
+        }
+
+        /* PAGE HEADER */
+
+        .page-header {
+            position: relative;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            right: 3%;
+            top: -100px;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(91, 140, 255, 0.08);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 30px rgba(91, 140, 255, 0.025),
+                0 0 0 60px rgba(91, 140, 255, 0.015);
+            pointer-events: none;
+        }
+
+        .page-header>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(32px, 4vw, 42px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            font-weight: 700;
+        }
+
+        .page-header h1 span {
+            color: var(--primary-hover);
+        }
+
+        .page-description {
+            max-width: 600px;
+            margin-top: 13px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* REPORT CARD */
+
+        .report-card {
+            position: relative;
+            padding: 29px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+        }
+
+        .report-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-title {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .report-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: var(--primary-hover);
+            background: var(--primary-soft);
+            border: 1px solid rgba(91, 140, 255, 0.2);
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .report-title h2 {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+        }
+
+        .report-title p {
+            margin-top: 3px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--success);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.35);
+        }
+
+        .status.pending-status {
+            color: var(--warning);
+        }
+
+        .status.pending-status::before {
+            background: var(--warning);
+            box-shadow: none;
+        }
+
+        .status.failed-status {
+            color: #f87171;
+        }
+
+        .status.failed-status::before {
+            background: #f87171;
+            box-shadow: none;
+        }
+
+        /* AI REPORT CONTENT */
+
+        .analysis-content {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .analysis-content h1,
+        .analysis-content h2,
+        .analysis-content h3 {
+            color: var(--text);
+            margin: 24px 0 10px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .analysis-content ul,
+        .analysis-content ol {
+            padding-left: 24px;
+            margin: 8px 0 18px;
+        }
+
+        .analysis-content li {
+            padding-left: 4px;
+            margin-bottom: 6px;
+        }
+
+        .analysis-content strong {
+            color: var(--text);
+        }
+
+        .analysis-content p {
+            margin-bottom: 14px;
+        }
+
+        /* ACTIONS */
+
+        .report-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .report-actions-main,
+        .report-actions-navigation {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .report-actions-navigation {
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 9px 14px;
+            color: var(--text);
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-hover);
+            border-color: rgba(91, 140, 255, 0.4);
+            background: var(--primary-soft);
+        }
+
+        .primary-btn {
+            border-color: rgba(91, 140, 255, 0.4);
+            background: var(--primary-soft);
+        }
+
+        .primary-btn:hover {
+            background: rgba(91, 140, 255, 0.2);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .analysis-container {
+                width: 90%;
+                padding: 42px 0 65px;
+            }
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .report-card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                height: 66px;
+                padding: 0 5%;
+            }
+
+            .nav-left {
+                gap: 16px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .page-label {
+                padding-left: 16px;
+                font-size: 12px;
+            }
+
+            .nav-right {
+                gap: 12px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 7px 11px;
+                font-size: 12px;
+            }
+
+            .analysis-container {
+                width: 90%;
+                padding: 30px 0 55px;
+            }
+
+            .page-header {
+                padding: 24px 0 27px;
+                margin-bottom: 24px;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+                letter-spacing: -1.2px;
+            }
+
+            .page-description {
+                font-size: 12px;
+            }
+
+            .report-card {
+                padding: 22px;
+            }
+
+            .report-title h2 {
+                font-size: 16px;
+            }
+
+            .analysis-content {
+                font-size: 12px;
+                line-height: 1.8;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .page-label {
+                display: none;
+            }
+
+            .analysis-container {
+                width: 92%;
+                padding-top: 25px;
+            }
+
+            .page-header h1 {
+                font-size: 29px;
+            }
+
+            .report-card {
+                padding: 18px;
+            }
+
+            .report-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 13px;
+            }
+
+            .report-actions-main,
+            .report-actions-navigation {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .report-actions .action-btn {
+                width: 100%;
+            }
+
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #111827 !important;
+            }
+
+            .report-actions,
+            nav,
+            header {
+                display: none !important;
+            }
+
+            .analysis-content {
+                color: #111827 !important;
+                background: #ffffff !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .analysis-content h1,
+            .analysis-content h2,
+            .analysis-content h3,
+            .analysis-content p,
+            .analysis-content li {
+                color: #111827 !important;
+            }
+
+            .analysis-content {
+                overflow: visible !important;
+            }
+
+            @page {
+                margin: 18mm;
+            }
+        }
+
+
+        /* Skill Gap Analysis page adjustments */
+        .report-content {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.9;
+            overflow-wrap: anywhere;
+        }
+
+        .report-content h1,
+        .report-content h2,
+        .report-content h3 {
+            color: var(--text);
+            margin: 24px 0 10px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .report-content ul,
+        .report-content ol {
+            padding-left: 24px;
+            margin: 8px 0 18px;
+        }
+
+        .report-content li {
+            padding-left: 4px;
+            margin-bottom: 6px;
+        }
+
+        .report-content strong {
+            color: var(--text);
+        }
+
+        .report-content p {
+            margin-bottom: 14px;
+        }
+
+        .error-message {
+            color: #f87171;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 700px) {
+            .report-content {
+                font-size: 12px;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="logo">CareerForge <span>AI</span></a>
+            <span class="page-label">Skill Gap Analysis</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+            <a href="{% url 'resume_analysis' %}" class="nav-link">Resume</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="analysis-container">
+        <section class="page-header">
+            <p class="eyebrow">CAREER INTELLIGENCE</p>
+            <h1>Your Skill Gap <span>Analysis</span></h1>
+            <p class="page-description">
+                Compare your current skills with the skills required for your target career
+                and identify the areas you should focus on developing.
+            </p>
+        </section>
+
+        <section class="report-card">
+            <div class="report-header">
+                <div class="report-title">
+                    <div class="report-icon">✦</div>
+                    <div>
+                        <h2>Your Personalized Skill Report</h2>
+                        <p>Generated by CareerForge AI</p>
+                    </div>
+                </div>
+                {% if error %}
+                <span class="status failed-status">Analysis Unavailable</span>
+                {% else %}
+                <span class="status">Skill Gap Report</span>
+                {% endif %}
+            </div>
+
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% elif formatted_analysis %}
+            <div class="report-content">{{ formatted_analysis }}</div>
+            {% else %}
+            <p class="page-description" style="margin-top: 0;">
+                No skill gap report is available yet. Please try again after completing your resume analysis.
+            </p>
+            {% endif %}
+
+            <div class="report-actions">
+
+                <div class="report-actions-main">
+                    {% if formatted_analysis %}
+                    <button type="button" class="action-btn primary-btn" onclick="window.print()">
+                        Download / Print Report
+                    </button>
+                    {% endif %}
+                </div>
+
+                <div class="report-actions-navigation">
+                    <a href="{% url 'resume_analysis' %}" class="action-btn primary-btn">
+                        ← Back to Resume Analysis
+                    </a>
+
+                    <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+</body>
+
+</html>

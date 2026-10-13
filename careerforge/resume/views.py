@@ -8,6 +8,12 @@ import markdown
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def analyze_resume_with_ai(resume):
     try:
         if not settings.GEMINI_API_KEY:
@@ -42,7 +48,7 @@ RESUME TEXT:
 """
 
         response = client.models.generate_content(
-            model="gemini-3.8-flash",
+            model="gemini-3.1-flash-lite",
             contents=prompt
         )
 
@@ -56,7 +62,8 @@ RESUME TEXT:
         )
         return True
 
-    except Exception:
+    except Exception as e:
+        logger.exception("Resume AI analysis failed")
         resume.analysis_status = "failed"
         resume.save(update_fields=["analysis_status"])
         return False
@@ -108,6 +115,7 @@ def upload_resume(request):
                 'resume_file': resume_file,
                 'extracted_text': '',
                 'analysis_result': '',
+                'skill_gap_result': '',
                 'analysis_status': 'pending'
             }
         )
@@ -162,3 +170,96 @@ def resume_analysis(request):
         'resume': resume,
         'formatted_analysis': formatted_analysis
     })
+
+@login_required
+def skill_gap_analysis(request):
+    try:
+        resume = Resume.objects.get(user=request.user)
+        profile = request.user.profile
+    except Resume.DoesNotExist:
+        return redirect('upload_resume')
+    except Exception:
+        return redirect('dashboard')
+
+    if resume.analysis_status != 'completed':
+        return redirect('resume_analysis')
+
+    if not settings.GEMINI_API_KEY:
+        return render(request, 'skill-gap-analysis.html', {
+            'error': 'AI service is not configured.'
+        })
+
+    try:
+
+        if resume.skill_gap_result:
+            formatted_analysis = mark_safe(
+                markdown.markdown(
+                    escape(resume.skill_gap_result),
+                    extensions=[]
+                )
+            )
+
+            return render(request, 'skill-gap-analysis.html', {
+                'formatted_analysis': formatted_analysis,
+                'profile': profile
+            })
+
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
+        prompt = f"""
+You are a career skill-gap analyst for CareerForge AI.
+
+Analyze the user's resume against their selected career interest.
+
+Education level: {profile.get_education_level_display()}
+Career interest: {profile.career_interest}
+Preferred institute: {profile.preferred_institute}
+
+Resume text:
+{resume.extracted_text[:20000]}
+
+Provide these sections:
+1. Target Career Overview
+2. Skills Found in the Resume
+3. Required Skills Already Demonstrated
+4. Missing or Unclear Skills
+5. Priority Skills to Learn
+6. Recommended Next Steps
+
+Rules:
+- Do not claim a skill is missing if the resume simply does not provide enough evidence.
+- Separate confirmed skills from skills that are unclear or not demonstrated.
+- Do not invent qualifications or experience.
+- Keep recommendations practical for a student or fresher.
+- Use clear headings and bullet points.
+"""
+
+        response = client.models.generate_content(
+            model="gemini-3.1-flash-lite",
+            contents=prompt
+        )
+
+        if not response.text:
+            raise ValueError("Empty AI response.")
+
+        resume.skill_gap_result = response.text
+        resume.save(update_fields=['skill_gap_result'])
+
+        formatted_analysis = mark_safe(
+            markdown.markdown(
+                escape(response.text),
+                extensions=[]
+            )
+        )
+
+        return render(request, 'skill-gap-analysis.html', {
+            'formatted_analysis': formatted_analysis,
+            'profile': profile
+        })
+
+    except Exception as e:
+        logger.exception("Skill gap analysis failed")
+        return render(request, 'skill-gap-analysis.html', {
+            'error': 'Skill gap analysis failed. Please try again.',
+            'profile': profile
+        })

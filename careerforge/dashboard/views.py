@@ -5,6 +5,31 @@ from userprofile.models import UserProfile
 from resume.models import Resume
 
 # Create your views here.
+# @login_required
+# def dashboard(request):
+
+#     try:
+#         profile = UserProfile.objects.get(user=request.user)
+#         profile_completed = True
+#     except UserProfile.DoesNotExist:
+#         profile = None
+#         profile_completed = False
+
+#     try:
+#         resume = Resume.objects.get(user=request.user)
+#         resume_uploaded = True
+#     except Resume.DoesNotExist:
+#         resume = None
+#         resume_uploaded = False
+
+#     return render(request, 'dashboard.html', {
+#         'user': request.user,
+#         'profile': profile,
+#         'profile_completed': profile_completed,
+#         'resume': resume,
+#         'resume_uploaded': resume_uploaded
+#     })
+
 @login_required
 def dashboard(request):
 
@@ -22,10 +47,62 @@ def dashboard(request):
         resume = None
         resume_uploaded = False
 
+    # Check resume analysis status
+    resume_analysis_completed = (
+        resume_uploaded
+        and resume.analysis_status == 'completed'
+        and bool(resume.analysis_result)
+    )
+
+    # Check skill gap analysis status
+    skill_gap_completed = (
+        resume_uploaded
+        and bool(resume.skill_gap_result)
+    )
+
+    # Career Journey steps
+    journey = [
+        {
+            'title': 'Build Profile',
+            'description': 'Education & interests',
+            'completed': profile_completed,
+        },
+        {
+            'title': 'Analyze Resume',
+            'description': 'Skills & experience',
+            'completed': (
+                resume_analysis_completed and skill_gap_completed
+            ),
+        },
+        {
+            'title': 'Career Insights',
+            'description': 'AI recommendations',
+            'completed': False,
+        },
+        {
+            'title': 'Learning Roadmap',
+            'description': 'Build your future',
+            'completed': False,
+        },
+    ]
+
+    # Set completed, active and pending states
+    active_found = False
+
+    for step in journey:
+        if step['completed']:
+            step['state'] = 'completed'
+        elif not active_found:
+            step['state'] = 'active'
+            active_found = True
+        else:
+            step['state'] = 'pending'
+
     return render(request, 'dashboard.html', {
         'user': request.user,
         'profile': profile,
         'profile_completed': profile_completed,
         'resume': resume,
-        'resume_uploaded': resume_uploaded
+        'resume_uploaded': resume_uploaded,
+        'journey': journey,
     })

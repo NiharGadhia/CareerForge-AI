@@ -141,7 +141,17 @@
                             what you need to learn for your target career.
                         </p>
                     </div>
-                    <span class="coming-soon">Coming Soon</span>
+
+                    {% if resume_uploaded %}
+                    <a href="{% url 'skill_gap_analysis' %}" class="card-button">
+                        View Skill Gap Analysis
+                    </a>
+                    {% else %}
+                    <a href="{% url 'upload_resume' %}" class="card-button">
+                        Upload Resume
+                    </a>
+                    {% endif %}
+
                     <span class="tool-arrow">→</span>
                 </div>
 
@@ -198,35 +208,26 @@
 
             <div class="journey">
 
-                <div class="journey-item active">
-                    <div class="journey-dot">01</div>
-                    <h3>Build Profile</h3>
-                    <p>Education & interests</p>
+                {% for step in journey %}
+
+                <div class="journey-item {{ step.state }}">
+                    <div class="journey-dot">
+                        {% if step.state == 'completed' %}
+                        ✓
+                        {% else %}
+                        0{{ forloop.counter }}
+                        {% endif %}
+                    </div>
+
+                    <h3>{{ step.title }}</h3>
+                    <p>{{ step.description }}</p>
                 </div>
 
-                <div class="journey-connector"></div>
+                {% if not forloop.last %}
+                <div class="journey-connector {% if step.state == 'completed' %}completed{% endif %}"></div>
+                {% endif %}
 
-                <div class="journey-item">
-                    <div class="journey-dot">02</div>
-                    <h3>Analyze Resume</h3>
-                    <p>Skills & experience</p>
-                </div>
-
-                <div class="journey-connector"></div>
-
-                <div class="journey-item">
-                    <div class="journey-dot">03</div>
-                    <h3>Career Insights</h3>
-                    <p>AI recommendations</p>
-                </div>
-
-                <div class="journey-connector"></div>
-
-                <div class="journey-item">
-                    <div class="journey-dot">04</div>
-                    <h3>Learning Roadmap</h3>
-                    <p>Build your future</p>
-                </div>
+                {% endfor %}
 
             </div>
         </section>

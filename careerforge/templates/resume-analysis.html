@@ -313,16 +313,25 @@
 
         /* ACTIONS */
 
-
-        /* ACTIONS */
-
         .report-actions {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 18px;
             margin-top: 30px;
             padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .report-actions-main,
+        .report-actions-navigation {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .report-actions-navigation {
+            padding-top: 16px;
             border-top: 1px solid var(--border);
         }
 
@@ -475,19 +484,20 @@
                 gap: 13px;
             }
 
-            .report-actions {
+            .report-actions-main,
+            .report-actions-navigation {
                 align-items: stretch;
                 flex-direction: column;
             }
 
-            .report-actions form {
+            .report-actions-main form {
                 width: 100%;
             }
 
-            .report-actions form .action-btn,
-            .report-actions>.action-btn {
+            .report-actions .action-btn {
                 width: 100%;
             }
+
 
         }
 
@@ -611,28 +621,37 @@
 
             <div class="report-actions">
 
-                {% if resume.analysis_status == 'completed' %}
-                <button type="button" class="action-btn primary-btn" onclick="window.print()">
-                    Download / Print Report
-                </button>
-                {% endif %}
-
-                {% if resume.analysis_status != 'completed' %}
-                <form method="POST" action="{% url 'retry_resume_analysis' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="action-btn primary-btn">
-                        Retry Analysis
+                <div class="report-actions-main">
+                    {% if resume.analysis_status == 'completed' %}
+                    <button type="button" class="action-btn primary-btn" onclick="window.print()">
+                        Download / Print Report
                     </button>
-                </form>
-                {% endif %}
 
-                <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
-                    ← Back to Dashboard
-                </a>
+                    <a href="{% url 'skill_gap_analysis' %}" class="action-btn primary-btn">
+                        View Skill Gap Analysis →
+                    </a>
+                    {% endif %}
 
-                <a href="{% url 'upload_resume' %}" class="action-btn">
-                    Upload New Resume
-                </a>
+                    {% if resume.analysis_status != 'completed' %}
+                    <form method="POST" action="{% url 'retry_resume_analysis' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn primary-btn">
+                            Retry Analysis
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+
+                <div class="report-actions-navigation">
+                    <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
+                        ← Back to Dashboard
+                    </a>
+
+                    <a href="{% url 'upload_resume' %}" class="action-btn">
+                        Upload New Resume
+                    </a>
+                </div>
+
             </div>
 
         </section>
