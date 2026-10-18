@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import logout as auth_logout
 from .forms import RegisterForm
 from userprofile.models import UserProfile
+from django.contrib import messages
 
 # Create your views here.
 
@@ -15,6 +16,7 @@ def register(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Account created successfully. Please log in.')
             return redirect('login')
 
     else:
@@ -43,9 +45,8 @@ def login(request):
             # New user → profile
             return redirect('profile')
 
-        return render(request, 'login.html', {
-            'error': 'Invalid username or password.'
-        })
+        messages.error(request, 'Invalid username or password.')
+        return render(request, 'login.html')
 
     return render(request, 'login.html')
 

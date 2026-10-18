@@ -272,6 +272,38 @@
             box-shadow: none;
         }
 
+        .error-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 15px;
+            margin: 0 0 18px;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.10);
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .error-message::before {
+            content: "!";
+            display: inline-flex;
+            flex: 0 0 18px;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            color: #111720;
+            background: #f87171;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
         /* AI REPORT CONTENT */
 
         .analysis-content {
@@ -563,12 +595,6 @@
             margin-bottom: 14px;
         }
 
-        .error-message {
-            color: #f87171;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
         @media (max-width: 700px) {
             .report-content {
                 font-size: 12px;
@@ -618,7 +644,7 @@
             </div>
 
             {% if error %}
-            <p class="error-message">{{ error }}</p>
+            <p class="error-message" role="alert">{{ error }}</p>
             {% elif formatted_analysis %}
             <div class="report-content">{{ formatted_analysis }}</div>
             {% else %}

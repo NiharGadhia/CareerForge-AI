@@ -24,6 +24,26 @@
         </div>
     </nav>
 
+    {% if messages %}
+    <div class="toast-container" id="toast-container">
+        {% for message in messages %}
+        <div class="toast-message {{ message.tags }}">
+            <div class="toast-content">
+                <span class="toast-text">{{ message }}</span>
+                <span class="toast-timer">5s</span>
+            </div>
+
+            <button type="button" class="toast-close" aria-label="Close notification">
+                &times;
+            </button>
+
+            <div class="toast-progress"></div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
     <main class="dashboard-container">
 
         <!-- Welcome Section -->
@@ -142,13 +162,17 @@
                         </p>
                     </div>
 
-                    {% if resume_uploaded %}
-                    <a href="{% url 'skill_gap_analysis' %}" class="card-button">
-                        View Skill Gap Analysis
-                    </a>
-                    {% else %}
+                    {% if not resume_uploaded %}
                     <a href="{% url 'upload_resume' %}" class="card-button">
                         Upload Resume
+                    </a>
+                    {% elif not profile_completed %}
+                    <a href="{% url 'profile' %}" class="card-button">
+                        Complete Profile
+                    </a>
+                    {% else %}
+                    <a href="{% url 'skill_gap_analysis' %}" class="card-button">
+                        View Skill Gap Analysis
                     </a>
                     {% endif %}
 
@@ -234,6 +258,43 @@
 
     </main>
 
+    <script>
+        document.querySelectorAll('.toast-message').forEach((toast) => {
+            const timerDisplay = toast.querySelector('.toast-timer');
+            const closeButton = toast.querySelector('.toast-close');
+
+            let remaining = 5;
+            let interval;
+            let timeout;
+
+            function dismissToast() {
+                if (toast.classList.contains('toast-hiding')) return;
+
+                clearInterval(interval);
+                clearTimeout(timeout);
+
+                toast.classList.add('toast-hiding');
+
+                setTimeout(() => toast.remove(), 200);
+            }
+
+            interval = setInterval(() => {
+                remaining -= 1;
+
+                if (timerDisplay) {
+                    timerDisplay.textContent = remaining + 's';
+                }
+
+                if (remaining <= 0) {
+                    dismissToast();
+                }
+            }, 1000);
+
+            timeout = setTimeout(dismissToast, 5000);
+
+            closeButton.addEventListener('click', dismissToast);
+        });
+    </script>
 </body>
 
 </html>

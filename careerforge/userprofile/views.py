@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 
 from .forms import UserProfileForm
 from .models import UserProfile
+from django.contrib import messages
 
 # Create your views here.
 
@@ -33,7 +34,10 @@ def profile(request):
             user_profile.user = request.user
             user_profile.save()
 
+            messages.success(request, 'Profile saved successfully!')
             return redirect('dashboard')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
 
     else:
 

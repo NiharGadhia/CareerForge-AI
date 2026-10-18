@@ -273,6 +273,43 @@
             box-shadow: none;
         }
 
+        /* ERROR MESSAGE */
+        .error-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 15px;
+            margin: 0 0 18px;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.10);
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .error-message::before {
+            content: "!";
+            display: inline-flex;
+            flex: 0 0 18px;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            color: #111720;
+            background: #f87171;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .status-message {
+            margin-top: 0;
+        }
+
         /* AI REPORT CONTENT */
 
         .analysis-content {
@@ -602,19 +639,17 @@
             </div>
 
             {% if error %}
-            <p class="page-description" style="color: #f87171; margin-top: 0;">
-                {{ error }}
-            </p>
+            <p class="error-message" role="alert">{{ error }}</p>
             {% endif %}
 
             {% if resume.analysis_status == 'completed' %}
             <div class="analysis-content">{{ formatted_analysis }}</div>
             {% elif resume.analysis_status == 'pending' %}
-            <p class="page-description" style="margin-top: 0;">
+            <p class="error-message" role="alert">
                 Your resume analysis is pending. Please try again shortly.
             </p>
             {% else %}
-            <p class="page-description" style="color: #f87171; margin-top: 0;">
+            <p class="error-message" role="alert">
                 We couldn't complete your resume analysis. You can try again below.
             </p>
             {% endif %}
