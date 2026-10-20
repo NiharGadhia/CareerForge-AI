@@ -36,6 +36,13 @@ def dashboard(request):
         and bool(resume.skill_gap_result)
     )
 
+    # Check career insights status
+    career_insights_completed = (
+        resume_uploaded
+        and bool(resume.career_recommendations_result)
+        and bool(resume.institute_recommendations_result)
+    )
+
     # Career Journey steps
     journey = [
         {
@@ -53,7 +60,7 @@ def dashboard(request):
         {
             'title': 'Career Insights',
             'description': 'AI recommendations',
-            'completed': False,
+            'completed': career_insights_completed,
         },
         {
             'title': 'Learning Roadmap',

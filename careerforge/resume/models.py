@@ -11,8 +11,10 @@ class Resume(models.Model):
     resume_file = models.FileField(upload_to='resumes/')
     extracted_text = models.TextField(blank=True, null=True)
     analysis_result = models.TextField(blank=True, null=True)
-    skill_gap_result = models.TextField(blank=True, null=True)
     analysis_status = models.CharField(max_length=20, default='pending')
+    skill_gap_result = models.TextField(blank=True, null=True)
+    career_recommendations_result = models.TextField(blank=True, null=True)
+    institute_recommendations_result = models.TextField(blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

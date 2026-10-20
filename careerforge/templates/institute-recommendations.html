@@ -1,0 +1,895 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute Recommendations | CareerForge AI</title>
+
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --surface: #111720;
+            --surface-light: #161d27;
+            --text: #f5f7fa;
+            --text-secondary: #a5afbd;
+            --text-muted: #6f7a89;
+            --border: #252d38;
+            --primary: #5b8cff;
+            --primary-hover: #7aa2ff;
+            --primary-soft: rgba(91, 140, 255, 0.12);
+            --success: #34d399;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 75% 0%,
+                    rgba(91, 140, 255, 0.08),
+                    transparent 30%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            background: rgba(11, 15, 20, 0.84);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left {
+            gap: 28px;
+        }
+
+        .logo {
+            color: var(--text);
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .page-label {
+            color: var(--text-muted);
+            font-size: 14px;
+            padding-left: 28px;
+            border-left: 1px solid var(--border);
+        }
+
+        .nav-right {
+            gap: 22px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .logout-btn {
+            color: var(--text);
+            font-size: 14px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-hover);
+        }
+
+        /* MAIN CONTAINER */
+
+        .analysis-container {
+            width: min(1120px, 88%);
+            margin: 0 auto;
+            padding: 52px 0 80px;
+        }
+
+        /* PAGE HEADER */
+
+        .page-header {
+            position: relative;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            right: 3%;
+            top: -100px;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(91, 140, 255, 0.08);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 30px rgba(91, 140, 255, 0.025),
+                0 0 0 60px rgba(91, 140, 255, 0.015);
+            pointer-events: none;
+        }
+
+        .page-header>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(32px, 4vw, 42px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            font-weight: 700;
+        }
+
+        .page-header h1 span {
+            color: var(--primary-hover);
+        }
+
+        .page-description {
+            max-width: 600px;
+            margin-top: 13px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* REPORT CARD */
+
+        .report-card {
+            position: relative;
+            padding: 29px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+        }
+
+        .report-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-title {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .report-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            color: var(--primary-hover);
+            background: var(--primary-soft);
+            border: 1px solid rgba(91, 140, 255, 0.2);
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .report-title h2 {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+        }
+
+        .report-title p {
+            margin-top: 3px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--success);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.35);
+        }
+
+        .status.failed-status {
+            color: #f87171;
+        }
+
+        .status.failed-status::before {
+            background: #f87171;
+            box-shadow: none;
+        }
+
+        /* ERROR MESSAGE */
+
+        .error-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 15px;
+            margin: 0 0 18px;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.10);
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .error-message::before {
+            content: "!";
+            display: inline-flex;
+            flex: 0 0 18px;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            color: #111720;
+            background: #f87171;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        /* AI RECOMMENDATION CONTENT */
+
+        .recommendation-content {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.9;
+            overflow-wrap: anywhere;
+        }
+
+        .recommendation-content h1,
+        .recommendation-content h2,
+        .recommendation-content h3 {
+            color: var(--text);
+            margin: 24px 0 10px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .recommendation-content h1:first-child,
+        .recommendation-content h2:first-child,
+        .recommendation-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .recommendation-content ul,
+        .recommendation-content ol {
+            padding-left: 24px;
+            margin: 8px 0 18px;
+        }
+
+        .recommendation-content li {
+            padding-left: 4px;
+            margin-bottom: 6px;
+        }
+
+        .recommendation-content strong {
+            color: var(--text);
+        }
+
+        .recommendation-content p {
+            margin-bottom: 14px;
+        }
+
+        /* PREMIUM EXPLORE TOOLS */
+
+        .explore-tools {
+            position: relative;
+            margin-top: 30px;
+            padding: 28px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 100% 0%,
+                    rgba(91, 140, 255, 0.10),
+                    transparent 38%),
+                var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .explore-tools::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 28px;
+            width: 65px;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    var(--primary),
+                    rgba(91, 140, 255, 0));
+        }
+
+        .explore-heading {
+            position: relative;
+            margin-bottom: 23px;
+        }
+
+        .explore-eyebrow {
+            margin-bottom: 7px;
+            color: var(--primary-hover);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+        }
+
+        .explore-heading h2 {
+            color: var(--text);
+            font-size: 21px;
+            font-weight: 650;
+            letter-spacing: -0.6px;
+        }
+
+        .explore-description {
+            margin-top: 6px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .tool-card {
+            position: relative;
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px 17px;
+            overflow: hidden;
+            background: linear-gradient(145deg,
+                    rgba(22, 29, 39, 0.98),
+                    rgba(17, 23, 32, 0.98));
+            border: 1px solid #293342;
+            border-radius: 11px;
+            transition:
+                transform 0.22s ease,
+                border-color 0.22s ease,
+                box-shadow 0.22s ease,
+                background 0.22s ease;
+        }
+
+        .tool-card::after {
+            content: "";
+            position: absolute;
+            top: -45px;
+            right: -45px;
+            width: 100px;
+            height: 100px;
+            background: rgba(91, 140, 255, 0.10);
+            border-radius: 50%;
+            filter: blur(25px);
+            opacity: 0;
+            transition: opacity 0.22s ease;
+            pointer-events: none;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(91, 140, 255, 0.55);
+            box-shadow: 0 8px 28px rgba(35, 83, 180, 0.12);
+        }
+
+        .tool-card:hover::after {
+            opacity: 1;
+        }
+
+        .tool-icon {
+            display: flex;
+            width: 43px;
+            height: 43px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 17px;
+            color: #8eafff;
+            background: rgba(91, 140, 255, 0.12);
+            border: 1px solid rgba(91, 140, 255, 0.20);
+            border-radius: 10px;
+            font-size: 21px;
+        }
+
+        .tool-card h3 {
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 650;
+            line-height: 1.5;
+        }
+
+        .tool-card p {
+            flex: 1;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.75;
+        }
+
+        .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--primary-hover);
+            font-size: 12px;
+            font-weight: 650;
+            transition: gap 0.2s ease;
+        }
+
+        .tool-card:hover .tool-link {
+            gap: 11px;
+        }
+
+        @media (max-width: 850px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .explore-tools {
+                padding: 21px 17px;
+            }
+
+            .explore-tools::before {
+                left: 17px;
+            }
+
+            .explore-heading h2 {
+                font-size: 19px;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .tool-card {
+                padding: 18px;
+            }
+
+            .tool-icon {
+                margin-bottom: 12px;
+            }
+
+            .tool-card p {
+                margin-bottom: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .tool-card,
+            .tool-card::after,
+            .tool-link {
+                transition: none;
+            }
+
+            .tool-card:hover {
+                transform: none;
+            }
+        }
+
+        /* ACTIONS */
+
+        .report-actions {
+            margin-top: 24px;
+        }
+
+        .report-actions-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 9px 14px;
+            color: var(--text);
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+            white-space: nowrap;
+            cursor: pointer;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-hover);
+            border-color: rgba(91, 140, 255, 0.4);
+            background: var(--primary-soft);
+        }
+
+        .primary-btn {
+            border-color: rgba(91, 140, 255, 0.4);
+            background: var(--primary-soft);
+        }
+
+        .primary-btn:hover {
+            background: rgba(91, 140, 255, 0.2);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .analysis-container {
+                width: 90%;
+                padding: 42px 0 65px;
+            }
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .report-card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                height: 66px;
+                padding: 0 5%;
+            }
+
+            .nav-left {
+                gap: 16px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .page-label {
+                padding-left: 16px;
+                font-size: 12px;
+            }
+
+            .nav-right {
+                gap: 12px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 7px 11px;
+                font-size: 12px;
+            }
+
+            .analysis-container {
+                width: 90%;
+                padding: 30px 0 55px;
+            }
+
+            .page-header {
+                padding: 24px 0 27px;
+                margin-bottom: 24px;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+                letter-spacing: -1.2px;
+            }
+
+            .page-description {
+                font-size: 12px;
+            }
+
+            .report-card {
+                padding: 22px;
+            }
+
+            .report-title h2 {
+                font-size: 16px;
+            }
+
+            .recommendation-content {
+                font-size: 12px;
+                line-height: 1.8;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .page-label {
+                display: none;
+            }
+
+            .analysis-container {
+                width: 92%;
+                padding-top: 25px;
+            }
+
+            .page-header h1 {
+                font-size: 29px;
+            }
+
+            .report-card {
+                padding: 18px;
+            }
+
+            .report-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 13px;
+            }
+
+            .report-actions-navigation {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .report-actions .action-btn {
+                width: 100%;
+                white-space: normal;
+            }
+        }
+
+        /* PRINT */
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #111827 !important;
+            }
+
+            .navbar,
+            .report-actions,
+            .explore-tools {
+                display: none !important;
+            }
+
+            .analysis-container {
+                width: 100%;
+                padding: 0;
+            }
+
+            .page-header {
+                border-bottom: 1px solid #d1d5db;
+            }
+
+            .page-header h1,
+            .page-description,
+            .recommendation-content,
+            .recommendation-content h1,
+            .recommendation-content h2,
+            .recommendation-content h3,
+            .recommendation-content p,
+            .recommendation-content li,
+            .recommendation-content strong {
+                color: #111827 !important;
+            }
+
+            .report-card {
+                padding: 0;
+                background: #ffffff !important;
+                border: none !important;
+            }
+
+            .recommendation-content {
+                overflow: visible !important;
+            }
+
+            @page {
+                margin: 18mm;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="logo">
+                CareerForge <span>AI</span>
+            </a>
+            <span class="page-label">Institute Recommendations</span>
+        </div>
+
+        <div class="nav-right">
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                Dashboard
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link">
+                Profile
+            </a>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="analysis-container">
+
+        <section class="page-header">
+            <p class="eyebrow">EDUCATION INTELLIGENCE</p>
+            <h1>Institute <span>Recommendations</span></h1>
+            <p class="page-description">
+                Discover institutes and academic programs aligned with your
+                education, career interests, and demonstrated skills.
+            </p>
+        </section>
+
+        <section class="report-card">
+            <div class="report-header">
+                <div class="report-title">
+                    <div class="report-icon">✦</div>
+                    <div>
+                        <h2>Your Institute Report</h2>
+                        <p>Personalized institute suggestions by CareerForge AI</p>
+                    </div>
+                </div>
+
+                {% if error %}
+                <span class="status failed-status">
+                    Recommendations Unavailable
+                </span>
+                {% else %}
+                <span class="status">
+                    Career Insights
+                </span>
+                {% endif %}
+            </div>
+
+            {% if error %}
+            <p class="error-message" role="alert">
+                {{ error }}
+            </p>
+            {% elif formatted_recommendations %}
+            <div class="recommendation-content">
+                {{ formatted_recommendations }}
+            </div>
+            {% else %}
+            <p class="page-description" style="margin-top: 0;">
+                No career recommendations are available yet.
+                Please complete your profile and resume analysis first.
+            </p>
+            {% endif %}
+
+            <!-- ACTION BUTTONS -->
+            <div class="report-actions">
+                <div class="report-actions-navigation">
+                    <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
+                        ← Back to Dashboard
+                    </a>
+
+                    {% if formatted_recommendations %}
+                    <button type="button" class="action-btn primary-btn" onclick="window.print()">
+                        Download / Print Report
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="explore-tools">
+            <div class="explore-heading">
+                <p class="explore-eyebrow">CAREER DEVELOPMENT</p>
+                <h2>Explore Other Tools</h2>
+                <p class="explore-description">
+                    Take the next step towards your career goals with personalized AI insights.
+                </p>
+            </div>
+
+            <div class="tools-grid">
+                <a href="{% url 'resume_analysis' %}" class="tool-card">
+                    <div class="tool-icon">✦</div>
+                    <h3>Resume Analysis</h3>
+                    <p>Review your resume insights, strengths and areas for improvement.</p>
+                    <span class="tool-link">View Analysis <span>→</span></span>
+                </a>
+
+                <a href="{% url 'skill_gap_analysis' %}" class="tool-card">
+                    <div class="tool-icon">⌘</div>
+                    <h3>Skill Gap Analysis</h3>
+                    <p>Identify missing skills and discover areas to improve your career readiness.</p>
+                    <span class="tool-link">Explore Skills <span>→</span></span>
+                </a>
+
+                <a href="{% url 'career_recommendations' %}" class="tool-card">
+                    <div class="tool-icon">↗</div>
+                    <h3>Career Recommendations</h3>
+                    <p>Explore career paths that align with your skills, interests and profile.</p>
+                    <span class="tool-link">Explore Careers <span>→</span></span>
+                </a>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
