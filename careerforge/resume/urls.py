@@ -8,4 +8,5 @@ urlpatterns = [
     path('skill-gap/', views.skill_gap_analysis, name='skill_gap_analysis'),
     path('career-recommendations/', views.career_recommendations, name='career_recommendations'),
     path('institute-recommendations/', views.institute_recommendations, name='institute_recommendations'),
+    path('learning-roadmap/', views.learning_roadmap, name='learning_roadmap'),
 ]

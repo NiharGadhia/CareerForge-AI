@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Analysis | CareerForge AI</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <style>
         :root {
             --bg: #0b0f14;
@@ -406,7 +408,7 @@
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 15px;
         }
 
@@ -549,33 +551,30 @@
             }
         }
 
-
-
         /* ACTIONS */
 
         .report-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            margin-top: 30px;
-            padding-top: 22px;
-            border-top: 1px solid var(--border);
-        }
-
-        .report-actions-main,
-        .report-actions-navigation {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .report-actions-navigation {
+            margin-top: 24px;
             padding-top: 16px;
             border-top: 1px solid var(--border);
         }
 
-        .report-actions form {
+        .report-actions-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .report-actions-left,
+        .report-actions-right {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .report-actions-right form {
             display: flex;
             margin: 0;
         }
@@ -584,6 +583,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
             min-height: 36px;
             padding: 9px 14px;
             color: var(--text);
@@ -605,6 +605,11 @@
             background: var(--primary-soft);
         }
 
+        .action-btn i {
+            font-size: 13px;
+            line-height: 1;
+        }
+
         .primary-btn {
             border-color: rgba(91, 140, 255, 0.4);
             background: var(--primary-soft);
@@ -613,6 +618,29 @@
         .primary-btn:hover {
             background: rgba(91, 140, 255, 0.2);
         }
+
+        @media (max-width: 650px) {
+            .report-actions-navigation {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .report-actions-left,
+            .report-actions-right {
+                width: 100%;
+            }
+
+            .report-actions-left .action-btn,
+            .report-actions-right .action-btn,
+            .report-actions-right form {
+                flex: 1;
+            }
+
+            .report-actions-right form button {
+                width: 100%;
+            }
+        }
+
 
         /* RESPONSIVE */
 
@@ -740,33 +768,43 @@
 
         }
 
+        /* PRINT */
         @media print {
             body {
                 background: #ffffff !important;
                 color: #111827 !important;
             }
 
+            .navbar,
             .report-actions,
-            .explore-tools,
-            nav,
-            header {
+            .explore-tools {
                 display: none !important;
             }
 
-            .report-content {
-                color: #111827 !important;
-                background: #ffffff !important;
-                border: none !important;
-                box-shadow: none !important;
-                overflow: visible !important;
+            .analysis-container {
+                width: 100%;
+                padding: 0;
             }
 
+            .page-header {
+                border-bottom: 1px solid #d1d5db;
+            }
+
+            .page-header h1,
+            .page-description,
+            .report-content,
             .report-content h1,
             .report-content h2,
             .report-content h3,
             .report-content p,
-            .report-content li {
+            .report-content li,
+            .report-content strong {
                 color: #111827 !important;
+            }
+
+            .report-content {
+                background: #ffffff !important;
+                overflow: visible !important;
             }
 
             @page {
@@ -854,39 +892,39 @@
             </p>
             {% endif %}
 
+
             <div class="report-actions">
-
-                <div class="report-actions-main">
-                    {% if resume.analysis_status == 'completed' %}
-                    <button type="button" class="action-btn primary-btn" onclick="window.print()">
-                        Download / Print Report
-                    </button>
-                    {% endif %}
-
-                    {% if resume.analysis_status != 'completed' %}
-                    <form method="POST" action="{% url 'retry_resume_analysis' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="action-btn primary-btn">
-                            Retry Analysis
-                        </button>
-                    </form>
-                    {% endif %}
-                </div>
-
                 <div class="report-actions-navigation">
-                    <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
-                        ← Back to Dashboard
-                    </a>
 
-                    <a href="{% url 'upload_resume' %}" class="action-btn">
-                        Upload New Resume
-                    </a>
+                    <div class="report-actions-left">
+                        <a href="{% url 'dashboard' %}" class="action-btn primary-btn">
+                            ← Back to Dashboard
+                        </a>
+
+                        <a href="{% url 'upload_resume' %}" class="action-btn">
+                            Upload New Resume
+                        </a>
+                    </div>
+
+                    <div class="report-actions-right">
+                        {% if resume.analysis_status == 'completed' %}
+                        <button type="button" class="action-btn primary-btn" onclick="window.print()">
+                            <i class="fas fa-download"></i> Download / Print Report
+                        </button>
+                        {% else %}
+                        <form method="POST" action="{% url 'retry_resume_analysis' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="action-btn primary-btn">
+                                <i class="fas fa-rotate-right"></i> Retry Analysis
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+
                 </div>
-
             </div>
 
         </section>
-
 
         <section class="explore-tools">
 
@@ -918,6 +956,14 @@
                     <h3>Institute Recommendations</h3>
                     <p>Discover institutes and courses relevant to your career goals.</p>
                     <span class="tool-link">Explore Institutes <span>→</span></span>
+                </a>
+
+                <a href="{% url 'learning_roadmap' %}" class="tool-card">
+                    <div class="tool-icon">◎</div>
+                    <h3>Learning Roadmap</h3>
+                    <p>Follow a personalized learning plan with topics, projects, and milestones to achieve your career
+                        goals.</p>
+                    <span class="tool-link">Explore Roadmap <span>→</span></span>
                 </a>
             </div>
         </section>

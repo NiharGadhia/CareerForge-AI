@@ -43,6 +43,12 @@ def dashboard(request):
         and bool(resume.institute_recommendations_result)
     )
 
+    # Check learning roadmap status
+    learning_roadmap_completed = (
+        resume_uploaded
+        and bool(resume.learning_roadmap_result)
+    )
+
     # Career Journey steps
     journey = [
         {
@@ -65,7 +71,7 @@ def dashboard(request):
         {
             'title': 'Learning Roadmap',
             'description': 'Build your future',
-            'completed': False,
+            'completed': learning_roadmap_completed,
         },
     ]
 

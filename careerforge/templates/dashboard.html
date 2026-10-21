@@ -192,7 +192,7 @@
                     </a>
                     {% else %}
                     <a href="{% url 'career_recommendations' %}" class="card-button">
-                        View Recommendations
+                        View Career Recommendations
                     </a>
                     {% endif %}
 
@@ -208,7 +208,7 @@
                             career and educational goals.
                         </p>
                     </div>
-                    
+
                     {% if not resume_uploaded %}
                     <a href="{% url 'upload_resume' %}" class="card-button">
                         Upload Resume
@@ -219,7 +219,7 @@
                     </a>
                     {% else %}
                     <a href="{% url 'institute_recommendations' %}" class="card-button">
-                        View Recommendations
+                        View Institute Recommendations
                     </a>
                     {% endif %}
 
@@ -235,7 +235,21 @@
                             required for your chosen career.
                         </p>
                     </div>
-                    <span class="coming-soon">Coming Soon</span>
+
+                    {% if not resume_uploaded %}
+                    <a href="{% url 'upload_resume' %}" class="card-button">
+                        Upload Resume
+                    </a>
+                    {% elif not profile_completed %}
+                    <a href="{% url 'profile' %}" class="card-button">
+                        Complete Profile
+                    </a>
+                    {% else %}
+                    <a href="{% url 'learning_roadmap' %}" class="card-button">
+                        Explore Roadmap
+                    </a>
+                    {% endif %}
+
                     <span class="tool-arrow">→</span>
                 </div>
 

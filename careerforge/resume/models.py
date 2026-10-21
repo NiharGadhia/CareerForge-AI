@@ -15,6 +15,7 @@ class Resume(models.Model):
     skill_gap_result = models.TextField(blank=True, null=True)
     career_recommendations_result = models.TextField(blank=True, null=True)
     institute_recommendations_result = models.TextField(blank=True, null=True)
+    learning_roadmap_result = models.TextField(blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

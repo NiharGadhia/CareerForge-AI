@@ -51,7 +51,7 @@ RESUME TEXT:
 """
 
         response = client.models.generate_content(
-            model="gemini-3.1-flash-lite",
+            model="gemini-3.5-flash-lite",
             contents=prompt
         )
 
@@ -121,6 +121,7 @@ def upload_resume(request):
     resume.skill_gap_result = ""
     resume.career_recommendations_result = ""
     resume.institute_recommendations_result = ""
+    resume.learning_roadmap_result = ""
     resume.save()
 
     # Remove the replaced file from storage after the new file has been saved.
@@ -160,7 +161,7 @@ def resume_analysis(request):
     formatted_analysis = mark_safe(
         markdown.markdown(
             escape(resume.analysis_result or ""),
-            extensions=[]
+            extensions=["tables"]
         )
     )
 
@@ -195,7 +196,7 @@ def skill_gap_analysis(request):
             formatted_analysis = mark_safe(
                 markdown.markdown(
                     escape(resume.skill_gap_result),
-                    extensions=[]
+                    extensions=["tables"]
                 )
             )
             return render(request, "skill-gap-analysis.html", {
@@ -237,7 +238,7 @@ Rules:
 """
 
         response = client.models.generate_content(
-            model="gemini-3.1-flash-lite",
+            model="gemini-3.5-flash-lite",
             contents=prompt
         )
 
@@ -250,7 +251,7 @@ Rules:
         formatted_analysis = mark_safe(
             markdown.markdown(
                 escape(resume.skill_gap_result),
-                extensions=[]
+                extensions=["tables"]
             )
         )
 
@@ -291,7 +292,7 @@ def career_recommendations(request):
             formatted_recommendations = mark_safe(
                 markdown.markdown(
                     escape(resume.career_recommendations_result),
-                    extensions=[]
+                    extensions=["tables"]
                 )
             )
 
@@ -341,7 +342,7 @@ Rules:
 """
 
         response = client.models.generate_content(
-            model="gemini-3.1-flash-lite",
+            model="gemini-3.5-flash-lite",
             contents=prompt
         )
 
@@ -354,7 +355,7 @@ Rules:
         formatted_recommendations = mark_safe(
             markdown.markdown(
                 escape(resume.career_recommendations_result),
-                extensions=[]
+                extensions=["tables"]
             )
         )
 
@@ -393,7 +394,7 @@ def institute_recommendations(request):
             formatted_recommendations = mark_safe(
                 markdown.markdown(
                     escape(resume.institute_recommendations_result),
-                    extensions=[]
+                    extensions=["tables"]
                 )
             )
 
@@ -443,7 +444,7 @@ Rules:
 """
 
         response = client.models.generate_content(
-            model="gemini-3.1-flash-lite",
+            model="gemini-3.5-flash-lite",
             contents=prompt
         )
 
@@ -456,7 +457,7 @@ Rules:
         formatted_recommendations = mark_safe(
             markdown.markdown(
                 escape(resume.institute_recommendations_result),
-                extensions=[]
+                extensions=["tables"]
             )
         )
 
@@ -469,3 +470,101 @@ Rules:
         return render(request, "institute-recommendations.html", {
             "error": "Institute recommendations could not be generated. Please try again.",
         })
+
+@login_required
+def learning_roadmap(request):
+    try:
+        resume = Resume.objects.get(user=request.user)
+    except Resume.DoesNotExist:
+        return redirect('upload_resume')
+
+    try:
+        profile = request.user.profile
+    except Exception:
+        return redirect('profile')
+
+    if resume.analysis_status != "completed" or not resume.analysis_result:
+        return redirect('resume_analysis')
+
+    roadmap_html = ""
+
+    if resume.learning_roadmap_result:
+        roadmap_html = mark_safe(
+            markdown.markdown(
+                escape(resume.learning_roadmap_result),
+                extensions=["tables"]
+            )
+        )
+    else:
+        try:
+            if not settings.GEMINI_API_KEY:
+                raise ValueError("Gemini API key is not configured.")
+
+            client = genai.Client(
+                api_key=settings.GEMINI_API_KEY
+            )
+
+            prompt = f"""
+            Create a personalized learning roadmap based on the user's
+            resume, AI resume analysis, education, and career interest.
+
+            User Education:
+            {profile.get_education_level_display()}
+
+            Career Interest:
+            {profile.career_interest}
+
+            Preferred Institute:
+            {profile.preferred_institute}
+
+            Resume:
+            {resume.extracted_text[:15000]}
+
+            Resume Analysis:
+            {resume.analysis_result[:10000]}
+
+            Create a practical roadmap with these sections:
+
+            1. Career Goal
+            2. Current Skill Assessment
+            3. Learning Roadmap divided into phases
+            4. For each phase, include duration, topics, skills,
+               hands-on tasks, and expected outcomes
+            5. Practical Projects
+            6. Recommended Learning Resources
+            7. Progress Milestones
+            8. Final Preparation Checklist
+
+            Use clear headings, bullet points, and a realistic
+            beginner-friendly sequence. Give estimated durations,
+            not guaranteed results. Do not invent specific URLs.
+            """
+
+            response = client.models.generate_content(
+                model="gemini-3.5-flash-lite",
+                contents=prompt
+            )
+
+            if not response.text:
+                raise ValueError("Gemini returned an empty response.")
+
+            resume.learning_roadmap_result = response.text
+            resume.save(update_fields=['learning_roadmap_result'])
+
+            roadmap_html = mark_safe(
+                markdown.markdown(
+                    escape(response.text),
+                    extensions=["tables"]
+                )
+            )
+
+        except Exception:
+            logger.exception("Learning roadmap generation failed.")
+            return render(request, 'learning-roadmap.html', {
+                'error': 'Unable to generate the learning roadmap right now. Please try again later.',
+                'roadmap_html': '',
+            })
+
+    return render(request, 'learning-roadmap.html', {
+        'roadmap_html': roadmap_html,
+    })
